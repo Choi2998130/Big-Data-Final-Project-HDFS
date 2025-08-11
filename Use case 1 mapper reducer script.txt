@@ -1,0 +1,32 @@
+nano mapper.py
+
+import sys
+import re
+
+for line in sys.stdin:
+    line = line.strip()
+    words = re.findall(r'\w+', line.lower())
+    for word in words:
+        print(f"{word}\t1")
+
+nano reducer.py
+
+import sys
+
+current_word = None
+word_count = 0
+
+for line in sys.stdin:
+    word, count = line.strip().split('\t')
+    count = int(count)
+    
+    if current_word == word:
+        word_count += count
+    else:
+        if current_word:
+            print(f"{current_word}\t{word_count}")
+        current_word = word
+        word_count = count
+
+if current_word == word:
+    print(f"{current_word}\t{word_count}")
